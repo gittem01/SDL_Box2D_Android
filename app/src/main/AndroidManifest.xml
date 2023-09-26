@@ -31,7 +31,6 @@
         android:required="true"
         android:version="0x401000" />
 
-
     <!-- External mouse input events -->
     <uses-feature
         android:name="android.hardware.type.pc"

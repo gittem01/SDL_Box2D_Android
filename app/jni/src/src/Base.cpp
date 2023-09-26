@@ -2,6 +2,8 @@
 #include <DebugRenderer.h>
 #include <set>
 #include <vulkan/vulkan.h>
+#include <vk/ThinDrawer.h>
+#include "vk/Camera.h"
 
 void Base::createTestBodies()
 {
@@ -91,24 +93,7 @@ public:
 
 Base::Base()
 {
-    VkInstanceCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-
-    VkApplicationInfo appInfo;
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Hello Triangle";
-    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.pEngineName = "No Engine";
-    appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-    createInfo.pApplicationInfo = &appInfo;
-
-    VkInstance instance;
-    VkResult res = vkCreateInstance(&createInfo, nullptr, &instance);
-
-    if (res != VK_SUCCESS)
-    {
-        exit(1);
-    }
+    //td = new ThinDrawer(nullptr);
 
     memset(fingerPresses, 0, sizeof(fingerPresses));
     memset(fingerPositions, 0, sizeof(fingerPositions));
@@ -200,6 +185,9 @@ void Base::handleEvents()
             {
                 debugRenderer->camPos.x -= 0.5f * e.tfinger.dx * (float)width / debugRenderer->scaleFactor;
                 debugRenderer->camPos.y += 0.5f * e.tfinger.dy * (float)height / debugRenderer->scaleFactor;
+
+                //td->wh->cam->pos.x -= 0.01f * e.tfinger.dx * (float)width / pow(td->wh->cam->zoom, 2.0f);
+                //td->wh->cam->pos.y -= 0.01f * e.tfinger.dy * (float)height / pow(td->wh->cam->zoom, 2.0f);
             }
             fingerPositions[e.tfinger.fingerId][0] = (int)(e.tfinger.x * (float)width);
             fingerPositions[e.tfinger.fingerId][1] = (int)(e.tfinger.y * (float)height);
@@ -215,6 +203,8 @@ void Base::handleEvents()
                 b2Vec2 p1 = (1.0f / debugRenderer->scaleFactor) * p;
 
                 debugRenderer->camPos += p0 - p1;
+
+                //td->wh->cam->zoom += e.mgesture.dDist;
             }
             break;
         case SDL_WINDOWEVENT:
@@ -297,6 +287,11 @@ void Base::loop()
 {
     while (!shouldQuit)
     {
+        //td->wh->cam->updateOrtho();
+
+        //td->renderLoop();
+        //td->gameTime += deltaTime;
+
         handleEvents();
 
         world->Step(deltaTime, 8, 3);

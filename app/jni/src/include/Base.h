@@ -17,6 +17,8 @@ public:
 	int fingerPositions[20][2];
     std::vector<b2MouseJoint*> dragJoints;
 
+    class ThinDrawer* td;
+
 	float deltaTime = 0.0f;
 	uint32 renderFlags = 0x1F; // initially render everything
     int numFingers = 0;
